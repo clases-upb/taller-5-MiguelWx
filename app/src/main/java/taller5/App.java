@@ -5,19 +5,27 @@ package taller5;
 
 public class App {
     
-    public static void main(String[] args) {
+   public static void main(String[] args) {
+    try {
         
-        try {
-            
-        } 
+        Scanner scanner = new Scanner(System.in);
         
-        catch (Exception e) {
-            // TODO: handle exception
-        }
+        System.out.print("Introduce un número entre 1000 y 9999 para adivinar: ");
+        int numeroUsuario = scanner.nextInt();
+        System.out.println(adivinarNumero(numeroUsuario));
+        
+        System.out.println(Simular_ventas());
+        
+        System.out.println(Calcular_empaque(3464));
+
+        System.out.println(Jugar_21(4));
+
+
+    } catch (Exception e) {
+        // TODO: handle exception
     }
-
-
-    /*
+}
+   /*
     
         1.	Desarrolle un algoritmo e impleméntelo en Java que: le pida al usuario un número entero positivo 
         entre 1000 y 9999. En un ciclo genere números de manera aleatoria y cuente los intentos que hizo antes 
@@ -25,7 +33,17 @@ public class App {
         
     
     */ 
+    public static String adivinarNumero(int numeroUsuario) {
+        int numeroAleatorio;
+        int intentos = 0;
 
+        do {
+            numeroAleatorio = (int)(Math.random() * 9000) + 1000;
+            intentos++;
+        } while (numeroAleatorio != numeroUsuario);
+
+        return "Numero encontrado, el numero era: " + numeroUsuario + "\nNúmero de intentos: " + intentos;
+    }
 
 
 
@@ -61,7 +79,25 @@ public class App {
         
       
     */
+    public static String Simular_ventas() {
+        DecimalFormat form_pesos = new DecimalFormat("$#,###.00");
+        String resultado = "";
 
+        for (int año = 1; año <= 3; año++) {
+            int totalAño = 0;
+            resultado += "Año " + año + "\n";
+
+            for (int mes = 1; mes <= 12; mes++) {
+                int ventasMes = (int)(Math.random() * 1000000) + 50000;
+                totalAño += ventasMes;
+                resultado += "Ventas Mes " + mes + ": " + form_pesos.format(ventasMes) + "\n";
+            }
+
+            resultado += "Total ventas Año " + año + ": " + form_pesos.format(totalAño) + "\n\n";
+        }
+
+        return resultado;
+    }
     
 
 
@@ -86,7 +122,39 @@ public class App {
 
     */
 
+    public static String Calcular_empaque(int bombillas) {
+        int bombillasPorCaja = 30;
+        int cajasPorPallet = 16;
 
+        int cajasNecesarias = bombillas / bombillasPorCaja;
+        int bombillasRestantes = bombillas % bombillasPorCaja;
+        int palletsNecesarios = cajasNecesarias / cajasPorPallet;
+        int cajasRestantes = cajasNecesarias % cajasPorPallet;
+
+        String resultado = "Para " + bombillas + " bombillas, se necesitan " + cajasNecesarias + " cajas y " + palletsNecesarios + " pallets.\n";
+        resultado += "Se quedan " + bombillasRestantes + " bombillas sin empacar. Se empacará así:\n\n";
+
+        int cajaActual = 1;
+        for (int pallet = 1; pallet <= palletsNecesarios; pallet++) {
+            resultado += "Pallet " + pallet + " --> ";
+            for (int i = 0; i < cajasPorPallet; i++) {
+                resultado += "Caja" + cajaActual + (i < cajasPorPallet - 1 ? ", " : "");
+                cajaActual++;
+            }
+            resultado += "\n";
+        }
+
+        if (cajasRestantes > 0) {
+            resultado += "Pallet " + (palletsNecesarios + 1) + " --> ";
+            for (int i = 0; i < cajasRestantes; i++) {
+                resultado += "Caja" + cajaActual + (i < cajasRestantes - 1 ? ", " : "");
+                cajaActual++;
+            }
+            resultado += "\n";
+        }
+
+        return resultado;
+    }
 
     
 
@@ -111,6 +179,43 @@ public class App {
 
 
     */
+      public static String Jugar_21(int Jugadores){
+ 
+        try {
+            String TxTReturn = "";
+            int CartaAle = 0;
+            short MaxCartas = 3;
+            short Num21 = 21;
+           
+            if(Jugadores < 1 || Jugadores > 6){
+            TxTReturn += "Numero de jugadores no valido \n";        
+        }
+            else{
+ 
+                for(short i=1;  i<= Jugadores; i++){
+                   int cantcartas = 0;
+                    for(short w=1; MaxCartas >= w; w++){
+                        CartaAle = (int)(1+(10*Math.random()));
+                        cantcartas += CartaAle;
+ 
+                    }
+                    if(cantcartas < Num21)
+                        TxTReturn += "El jugador #" + i + " le fantan puntos: "+ cantcartas + "\n";
+                    else if(cantcartas == Num21)
+                        TxTReturn += "El jugador #" + i + " tuvo juego perfecto: "+ cantcartas + "\n";
+                    else if(cantcartas > Num21)
+                        TxTReturn += "El jugador #" + i + " se paso: "+ cantcartas + "\n";
+ 
+                   
+                }
+               
+            }
+                return TxTReturn;
+        } catch (Exception e) {
+            return "Hubo un error"+ e.toString();
+           
+        } 
+    }
 
 
 
